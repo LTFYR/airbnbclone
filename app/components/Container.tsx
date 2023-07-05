@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { ContainerProps } from "../interface";
 
 const Container: React.FC<ContainerProps> = ({ children }) => {
   return (
