@@ -49,6 +49,14 @@ export default function RentModal() {
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
 
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../Map"), {
+        ssr: false,
+      }),
+    [location]
+  );
+
   const setNewValue = (id: string, value: any) => {
     setValue(id, value, {
       shouldValidate: true,
@@ -102,14 +110,6 @@ export default function RentModal() {
     }
     return "Back";
   }, [step]);
-
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("../Map"), {
-        ssr: false,
-      }),
-    [location]
-  );
 
   let body = (
     <div className="flex flex-col gap-8">
