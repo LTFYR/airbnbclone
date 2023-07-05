@@ -1,16 +1,27 @@
 import prisma from "@/app/libs/prismaDb";
-import { IParams } from "../interface";
-export default async function getProperties(params: IParams) {
+
+export interface IPropertiesParams {
+  userId?: string;
+  guestCount?: number;
+  roomCount?: number;
+  bathroomCount?: number;
+  startDate?: string;
+  endDate?: string;
+  locationValue?: string;
+  category?: string;
+}
+
+export default async function getProperties(params: IPropertiesParams) {
   try {
     const {
       userId,
-      bathroomCount,
-      category,
-      endDate,
+      roomCount,
       guestCount,
+      bathroomCount,
       locationValue,
       startDate,
-      roomCount,
+      endDate,
+      category,
     } = params;
 
     let query: any = {};
@@ -28,11 +39,13 @@ export default async function getProperties(params: IParams) {
         gte: +roomCount,
       };
     }
+
     if (guestCount) {
       query.guestCount = {
         gte: +guestCount,
       };
     }
+
     if (bathroomCount) {
       query.bathroomCount = {
         gte: +bathroomCount,
@@ -48,8 +61,14 @@ export default async function getProperties(params: IParams) {
         reservations: {
           some: {
             OR: [
-              { endDate: { gte: startDate }, startDate: { lte: startDate } },
-              { startDate: { lte: endDate }, endDate: { gte: endDate } },
+              {
+                endDate: { gte: startDate },
+                startDate: { lte: startDate },
+              },
+              {
+                startDate: { lte: endDate },
+                endDate: { gte: endDate },
+              },
             ],
           },
         },
@@ -63,9 +82,9 @@ export default async function getProperties(params: IParams) {
       },
     });
 
-    const safeListings = listings.map((list) => ({
-      ...list,
-      createdAt: list.createdAt.toISOString(),
+    const safeListings = listings.map((listing) => ({
+      ...listing,
+      createdAt: listing.createdAt.toISOString(),
     }));
 
     return safeListings;
