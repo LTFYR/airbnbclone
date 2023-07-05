@@ -6,6 +6,8 @@ import Empty from "./components/Empty";
 import ListCard from "./components/listings/ListCard";
 import { HomeProps } from "./interface";
 
+export const dynamic = "force-dynamic";
+
 const Home = async ({ searchParams }: HomeProps) => {
   const listings = await getProperties(searchParams);
   const logedInUser = await getUser();
